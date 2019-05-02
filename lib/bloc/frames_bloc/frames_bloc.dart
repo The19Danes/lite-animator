@@ -36,7 +36,7 @@ class FramesBloc extends Bloc<FramesEvent, BuiltList<DrawPanel>>{
     }
     else if(event is DeleteFrame){
       print('Deleting frame : ${event.frameIndex}, current frame is : $currentFrameIndex');
-      if(currentFrameIndex >= event.frameIndex){//TODO check if bug fixed by adding '&& currentFrameIndex > 0'
+      if(currentFrameIndex >= event.frameIndex && currentFrameIndex > 0){
         currentFrameIndex--;
       }
       frames = frames.rebuild((b) => b.removeAt(event.frameIndex));
