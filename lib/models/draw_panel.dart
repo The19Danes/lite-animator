@@ -85,7 +85,6 @@ class _DrawPanelState extends State<DrawPanel> {
                     builder: (context, constraint) {
                       return GestureDetector(
                         onPanUpdate: (DragUpdateDetails details) {
-                          final RenderBox object = context.findRenderObject();
                           final translation = context
                               ?.findRenderObject()
                               ?.getTransformTo(null)

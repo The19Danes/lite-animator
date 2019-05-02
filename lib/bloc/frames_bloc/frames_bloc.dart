@@ -104,6 +104,4 @@ class FramesBloc extends Bloc<FramesEvent, BuiltList<DrawPanel>>{
       }
     }
   }
-
-
 }

@@ -28,13 +28,7 @@ class PainterBloc extends Bloc<PainterEvent, BuiltList<Stroke>> {
     if(this.strokes == null){
       this.strokes = BuiltList<Stroke>();
     }
-}
-
-//  PainterBloc copy(){
-//    return PainterBloc(
-//      strokes: this.strokes,
-//    );
-//  }
+  }
 
   @override
   BuiltList<Stroke> get initialState => strokes ?? BuiltList<Stroke>();

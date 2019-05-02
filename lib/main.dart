@@ -6,16 +6,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lite_animator/bloc/bloc.dart';
 import 'package:lite_animator/pages/animation_page.dart';
 import 'package:lite_animator/pages/draw_projects_page.dart';
+import 'package:lite_animator/pages/splash_page.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override
   void onError(Object error, StackTrace stacktrace) {
     print('$error, $stacktrace');
+    super.onError(error, stacktrace);
   }
 }
 
@@ -73,16 +76,3 @@ class _AnonEntryState extends State<AnonEntry> {
     );
   }
 }
-
-class SplashPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Splash Screen'),
-      ),
-    );
-  }
-}
-
-
