@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:photo_view/photo_view.dart';
 
 import 'package:lite_animator/bloc/bloc.dart';
 import 'package:lite_animator/models/models.dart';
