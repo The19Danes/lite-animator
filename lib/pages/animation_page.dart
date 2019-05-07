@@ -27,7 +27,6 @@ class _AnimationPageState extends State<AnimationPage> {
   @override
   Widget build(BuildContext context) {
     //TODO add scroll controller?
-
     return BlocBuilder(
         bloc: _framesBloc,
         builder: (BuildContext context, BuiltList<DrawPanel> frames) {
@@ -36,13 +35,41 @@ class _AnimationPageState extends State<AnimationPage> {
               child: CircularProgressIndicator(),
             );
           }
-
           print("in animation page, bloc's current frame index : ${_framesBloc.currentFrameIndex}");
           DrawPanel currentFrame = _framesBloc.currentFrame;
           currentFrameIndex = _framesBloc.currentFrameIndex;
 
           return Scaffold(
             persistentFooterButtons: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () => currentFrame.painterBloc.dispatch(Clear()),
+                ),
+                IconButton(
+                  icon: Icon(Icons.undo),
+                  onPressed: () =>
+                      currentFrame.painterBloc.dispatch(UndoStroke()),
+                ),
+                IconButton(
+                  icon: Icon(Icons.redo),
+                  //color: currentFrame.painterBloc.undoHistory.isEmpty ? Colors.grey : Colors.black,
+                  onPressed: () =>
+                      currentFrame.painterBloc.dispatch(RedoStroke()),
+                ),
+//                //TODO implement saving
+//                  IconButton(
+//                    icon: Icon(Icons.save),
+//                    onPressed: () {
+//                      List<Future<Image>> frameImages = getFrames(frames);
+//                      Future.wait(frameImages).then((value) => _framesBloc.dispatch(SaveGIF(value)));
+//                    },
+//                  ),
+              ],
+            ),
+            Row(children: <Widget>[
               IconButton(
                 tooltip: "New Frame To Left",
                 icon: Icon(Icons.flip_to_back),
@@ -68,6 +95,7 @@ class _AnimationPageState extends State<AnimationPage> {
                 icon: Icon(Icons.content_paste),
                 onPressed: () => _framesBloc.dispatch(PasteFrameFromClipboardToRight(currentFrameIndex)),
               ),
+            ],),
             ],
             appBar: AppBar(
               title: Text('Animation'),
@@ -79,81 +107,16 @@ class _AnimationPageState extends State<AnimationPage> {
                 onPressed: () {
                   playButtonPress(frames, context);
                 },
-
               ),
               body: Center(
                 child: currentFrame,
               ),
-              bottomSheet: ButtonBar(
-                alignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () => currentFrame.painterBloc.dispatch(Clear()),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.undo),
-                    onPressed: () =>
-                        currentFrame.painterBloc.dispatch(UndoStroke()),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.redo),
-                    //color: currentFrame.painterBloc.undoHistory.isEmpty ? Colors.grey : Colors.black,
-                    onPressed: () =>
-                        currentFrame.painterBloc.dispatch(RedoStroke()),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.save),
-                    onPressed: () {
-                      List<Future<Image>> frameImages = getFrames(frames);
-                      Future.wait(frameImages).then((value) => _framesBloc.dispatch(SaveGIF(value)));
-                    },
-                  )
-                ],
-              ),
               bottomNavigationBar: Container(
                 height: 75,
                 margin: EdgeInsets.all(0),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: frames == null ? 0 : frames.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == frames.length) {
-                      //new frame button
-                      return CreateNewFrameButton(framesBloc: _framesBloc);
-                    } else {
-                      // existing frame
-                      Future<Image> frameThumbnail =
-                          _framesBloc.frames[index].getPanelImage();
-                      return FutureBuilder(
-                        future: frameThumbnail,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            print('Error in the snapshot!! ${snapshot.error}');
-                          }
-                          return GestureDetector(
-                            onDoubleTap: () {
-                              _framesBloc.dispatch(DeleteFrame(index));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(10),
-                              width: 75,
-                              color: index == _framesBloc.currentFrameIndex
-                                  ? Colors.redAccent.withAlpha(100)
-                                  : Colors.grey,
-                              child: snapshot.data ?? Container(),
-                            ),
-                            onTap: () {
-                              _framesBloc.dispatch(ChangeFrame(index));
-                              setState(() {
-                                currentFrameIndex = index;
-                              });
-                            },
-                          );
-                        },
-                      );
-                    }
-                  },
+                child: BlocProvider(
+                  bloc: _framesBloc,
+                  child: FramesList(frames: frames,),
                 ),
               ));
         });
