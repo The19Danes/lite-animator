@@ -115,9 +115,46 @@ class _AnimationPageState extends State<AnimationPage> {
               bottomNavigationBar: Container(
                 height: 75,
                 margin: EdgeInsets.all(0),
-                child: BlocProvider(
-                  bloc: _framesBloc,
-                  child: FramesList(frames: frames,),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: frames == null ? 0 : frames.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == frames.length) {
+                      //new frame button
+                      return CreateNewFrameButton(framesBloc: _framesBloc);
+                    } else {
+                      // existing frame
+                      Future<Image> frameThumbnail =
+                      _framesBloc.frames[index].getPanelImage();
+                      return FutureBuilder(
+                        future: frameThumbnail,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            print('Error in the snapshot!! ${snapshot.error}');
+                          }
+                          return GestureDetector(
+                            onDoubleTap: () {
+                              _framesBloc.dispatch(DeleteFrame(index));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(10),
+                              width: 75,
+                              color: index == _framesBloc.currentFrameIndex
+                                  ? Colors.redAccent.withAlpha(100)
+                                  : Colors.grey,
+                              child: snapshot.data ?? Container(),
+                            ),
+                            onTap: () {
+                              _framesBloc.dispatch(ChangeFrame(index));
+                              setState(() {
+                                currentFrameIndex = index;
+                              });
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ));
         });
@@ -174,7 +211,7 @@ class CreateNewFrameButton extends StatelessWidget {
   }
 }
 
-
+///TODO this separation causes the displayed frame to not change. See if a fix exists.
 class FramesList extends StatefulWidget {
   final BuiltList<DrawPanel> frames;
 

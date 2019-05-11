@@ -72,7 +72,7 @@ class _DrawPanelState extends State<DrawPanel> {
       bloc: widget.painterBloc,
       builder: (BuildContext context, BuiltList<Stroke> strokes) {
         return ClipRect(
-          clipBehavior: Clip.none,
+          clipBehavior: Clip.antiAlias,
           child: Container(
             height: CANVAS_WIDTH,
             width: CANVAS_HEIGHT,
