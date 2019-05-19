@@ -1,10 +1,15 @@
-import 'package:equatable/equatable.dart';
+import 'package:built_value/serializer.dart';
+import 'package:built_value/built_value.dart';
 
-class TouchLocation extends Equatable{
-  final double x, y;
+part 'touch_location.g.dart';
 
-  TouchLocation({this.x, this.y}) : super([x,y]);
+abstract class TouchLocation implements Built<TouchLocation, TouchLocationBuilder> {
+  static Serializer<TouchLocation> get serializer => _$touchLocationSerializer;
 
-  @override
-  String toString() => 'TouchLocation { x: $x, y: $y }';
+  double get x;
+  double get y;
+
+  TouchLocation._();
+
+  factory TouchLocation([updates(TouchLocationBuilder b)]) = _$TouchLocation;
 }

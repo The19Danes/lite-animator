@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
 
 import 'package:lite_animator/bloc/frames_bloc/frames_event.dart';
 import 'package:lite_animator/bloc/painter_bloc/painter_bloc.dart';
 import 'package:lite_animator/models/models.dart';
+import 'package:lite_animator/models/serializers.dart';
 
 class FramesBloc extends Bloc<FramesEvent, BuiltList<DrawPanel>>{
   BuiltList<DrawPanel> frames = BuiltList<DrawPanel>();
@@ -49,6 +51,18 @@ class FramesBloc extends Bloc<FramesEvent, BuiltList<DrawPanel>>{
     }
     else if(event is SaveGIF){
       print('saving a .gif : ');
+    }
+    else if(event is SaveAnimationProject){
+      print("saving an animation project");
+      BuiltList<BuiltList<Stroke>> framesStrokes = BuiltList<BuiltList<Stroke>>();
+      for(DrawPanel frame in frames){
+        framesStrokes = framesStrokes.rebuild((b) => b.add(frame.painterBloc.strokes));
+      }
+      final specifiedType = const FullType(BuiltList,  [ FullType(BuiltList, [FullType(Stroke)] )]);
+      var jsonString = serializers.serialize(framesStrokes, specifiedType: specifiedType);
+
+      print(jsonString);
+      //TODO save as json file in document directory
     }
     else if(event is NewFrameToLeft){
       int indexToLeft = event.frameIndex;

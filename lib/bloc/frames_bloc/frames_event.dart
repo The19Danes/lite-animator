@@ -42,6 +42,11 @@ class SaveGIF extends FramesEvent {
   String toString() => 'SaveGIF { frameImages.length: ${frameImages.length} }';
 }
 
+class SaveAnimationProject extends FramesEvent {
+  @override
+  String toString() => 'SaveAnimationProject';
+}
+
 class NewFrameToLeft extends FramesEvent {
   final int frameIndex;
 

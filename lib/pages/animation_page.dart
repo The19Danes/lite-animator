@@ -1,8 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:photo_view/photo_view.dart';
 
 import 'package:lite_animator/bloc/bloc.dart';
 import 'package:lite_animator/models/models.dart';
@@ -49,25 +47,27 @@ class _AnimationPageState extends State<AnimationPage> {
                   icon: Icon(Icons.clear),
                   onPressed: () => currentFrame.painterBloc.dispatch(Clear()),
                 ),
-                IconButton(
-                  icon: Icon(Icons.undo),
-                  onPressed: () =>
-                      currentFrame.painterBloc.dispatch(UndoStroke()),
-                ),
-                IconButton(
-                  icon: Icon(Icons.redo),
-                  //color: currentFrame.painterBloc.undoHistory.isEmpty ? Colors.grey : Colors.black,
-                  onPressed: () =>
-                      currentFrame.painterBloc.dispatch(RedoStroke()),
-                ),
-//                //TODO implement saving
-//                  IconButton(
-//                    icon: Icon(Icons.save),
-//                    onPressed: () {
+                //TODO figure out how to get these buttons into two rows or something so they all fit
+//                IconButton(
+//                  icon: Icon(Icons.undo),
+//                  onPressed: () =>
+//                      currentFrame.painterBloc.dispatch(UndoStroke()),
+//                ),
+//                IconButton(
+//                  icon: Icon(Icons.redo),
+//                  //color: currentFrame.painterBloc.undoHistory.isEmpty ? Colors.grey : Colors.black,
+//                  onPressed: () =>
+//                      currentFrame.painterBloc.dispatch(RedoStroke()),
+//                ),
+//                //TODO investigate saving/sharing as a GIF later. For no saving refers to the project
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: () {
 //                      List<Future<Image>> frameImages = getFrames(frames);
 //                      Future.wait(frameImages).then((value) => _framesBloc.dispatch(SaveGIF(value)));
-//                    },
-//                  ),
+                      _framesBloc.dispatch(SaveAnimationProject());
+                    },
+                  ),
               ],
             ),
             Row(children: <Widget>[

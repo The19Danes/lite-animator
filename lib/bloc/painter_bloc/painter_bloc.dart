@@ -39,13 +39,17 @@ class PainterBloc extends Bloc<PainterEvent, BuiltList<Stroke>> {
       print("Continuing a stroke at ${event.strokePoint}");
       locations = locations.rebuild((b) => b.add(event.strokePoint));
       print("locations count while continuing a stroke: ${locations.length}");
-      final allStrokes = strokes.rebuild((b) => b.add(Stroke(locations: locations)));
+      final allStrokes = strokes.rebuild((b) => b.add(Stroke((b) => b
+          ..locations.addAll(locations)
+      )));
       yield allStrokes;
     }
     else if(event is EndStroke){
       print("Ended a stroke");
       if (locations.length > 0) {
-        strokes = strokes.rebuild((b) => b.add(Stroke(locations: locations)));
+        strokes = strokes.rebuild((b) => b.add(Stroke((b) => b
+          ..locations.addAll(locations)
+        )));
         locations = BuiltList<TouchLocation>();
         print("On stroke end, strokes count is: ${strokes.length}");
       }

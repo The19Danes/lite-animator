@@ -85,9 +85,12 @@ class _DrawPanelState extends State<DrawPanel> {
                         ?.findRenderObject()
                         ?.getTransformTo(null)
                         ?.getTranslation();
-                    widget.painterBloc.dispatch(ContinueStroke(TouchLocation(
-                        x: details.globalPosition.dx - translation.x,
-                        y: details.globalPosition.dy - translation.y)));
+//                    widget.painterBloc.dispatch(ContinueStroke(TouchLocation(
+//                        x: details.globalPosition.dx - translation.x,
+//                        y: details.globalPosition.dy - translation.y)));
+                      widget.painterBloc.dispatch(ContinueStroke(TouchLocation( (b) => b
+                          ..x = details.globalPosition.dx - translation.x
+                          ..y = details.globalPosition.dy - translation.y)));
                   },
                   onPanEnd: (DragEndDetails details) =>
                       widget.painterBloc.dispatch(EndStroke()),

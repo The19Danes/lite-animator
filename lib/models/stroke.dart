@@ -1,13 +1,17 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:equatable/equatable.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 import './touch_location.dart';
 
-class Stroke extends Equatable {
-  final BuiltList<TouchLocation>  locations;
+part 'stroke.g.dart';
 
-  Stroke({this.locations}) : super([locations]);
+abstract class Stroke implements Built<Stroke, StrokeBuilder> {
+  static Serializer<Stroke> get serializer => _$strokeSerializer;
 
-  @override
-  String toString() => 'Stroke { locations: ${locations.length} }';
+  BuiltList<TouchLocation> get locations;
+
+  Stroke._();
+
+  factory Stroke([updates(StrokeBuilder b)]) = _$Stroke;
 }
